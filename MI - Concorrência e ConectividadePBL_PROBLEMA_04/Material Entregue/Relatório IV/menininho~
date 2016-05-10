@@ -1,0 +1,175 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+%\usepackage[brazil]{babel}   
+\usepackage[latin1]{inputenc}  
+
+     
+\sloppy
+
+\title{Problema 1 - English Boggle}
+
+\author{Diego J. Leite\inst{1}, Lucas S. Carneiro\inst{2}}
+
+
+\address{Departamento de Tecnologia -- Universidade Estadual de Feira de Santana
+  (UEFS)\\
+  Caixa Postal 44.036-900 -- Feira de Santana -- BA -- Brazil
+  \email{diegojleite@gmail.com, jkdrangel@gmail.com}
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+This report is related to the first problem in the MI-Concorrência e Conectividade
+course of Engineering Computing at the State University of Feira de Santana,
+and it describes the solution for the problem proposed in the PBL sessions
+that aims to understand and synthesize an game of creation words with the advent of computational resources, called: Boogle.
+\end{abstract}
+     
+\begin{resumo} 
+Este artigo é referente à disciplina de MI-Concorrência e Conectividade do curso de Engenharia de Computação, da Universidade Estadual de Feira de Santana, e trata-se do produto de um problema proposto em sessões PBL que tem como finalidade compreender o funcionamento e sintetizar um jogo de criação de palavras com o advento de recursos computacionais, chamado: Boggle.
+\end{resumo}
+
+
+\section{Introdução}
+
+
+De modo a incentivar o estudo da Língua Inglesa aos alunos de uma escola, a inclusão de jogos nas aulas  foi pensada como uma forma de motivação para os alunos buscarem a aprendizagem de forma interativa. Para isso, foi solicitado aos alunos de Concorência e Conectividade, o desenvolvimento de  um jogo de criação de palavras.
+O jogo escolhido, boggle, é um jogo de formação de palavras dispostas em um grid em um determinado tempo de jogo. A aplicação do jogo deve se conectar a um servidor que contabiliza a pontuação do jogo através de um dicionario de palavras enviados pela aplicação. 
+
+Este relatorio está divido em Fundamentação Teórica na seção 4, Metodologia (Seção 5) e Resultados e Discussões (Seção 6). Sendo que a Fundamentação Teórica apresenta os conceitos teóricos utilizados para resolução do problema, a Metodologia aborda os métodos utilizados para o seu desenvolvimento, e na seção de Resultados e Discussões, os resultados obtidos são expostos, e são citadas as discussões sobre eles.
+
+
+\section{Fundamentação Teórica} \label{sec:firstpage}
+The first page must display the paper title, the name and address of the
+authors, the abstract in English and ``resumo'' in Portuguese (``resumos'' are
+required only for papers written in Portuguese). The title must be centered
+over the whole page, in 16 point boldface font and with 12 points of space
+before itself. Author names must be centered in 12 point font, bold, all of
+them disposed in the same line, separated by commas and with 12 points of
+space after the title. Addresses must be centered in 12 point font, also with
+12 points of space after the authors' names. E-mail addresses should be
+written using font Courier New, 10 point nominal size, with 6 points of space
+before and 6 points of space after.
+
+The abstract and ``resumo'' (if is the case) must be in 12 point Times font,
+indented 0.8cm on both sides. The word \textbf{Abstract} and \textbf{Resumo},
+should be written in boldface and must precede the text.
+
+\subsection{Árvore de Prefixos}
+
+The subsection titles must be in boldface, 12pt, flush left.
+
+\subsection{Protocolo de Comunicação}
+
+The subsection titles must be in boldface, 12pt, flush left.
+
+\section{Metodologia}
+
+   Materiais
+O jogo foi desenvolvido utilizando a IDE NetBeans, versões 7.0, na linguagem de programação Java.
+
+·         Métodos
+
+O inicio do desenvolvimento deu-se inicialmente pela implementação da comunicação cliente - servidor, feita a partir dos sockets da linguagem Java. Depois da comunicação implementada, o paser para leitura do arquivo do dicionario com as palavras foi desenvolvido, e uma árvore de prefixos foi utilizada para armazenar as palavras do dicionario.
+Com a comunicação pronta e as palavras carregadas e salvas na árvore, estrategias para o calculo da pontuação foram definidas com a busca da palavra no dicionario e, em caso afirmativo, o calculo da pontuação para a palavra  
+Depois de conectada e calculando a pontuação a interface do jogo começou a ser implantada. Os dados foram definidos a partir dos dados do jogo original e foram dispostos na tela do jogo em uma tabela de quatro linhas por quatro colunas , como no jogo. A interface mostra além dos dados com as letras que formaram as palavras, o tempo de jogo, as palavras enviadas e as informações da conexão com o servidor. 
+
+\section{Resultados e discussões}
+
+·         Como está funcionando o programa
+O jogo desenvolvido faz uma geração aleatória das faces dos dados mostradas ao usuário, dando o tempo de jogo para que as palavras possam ser formadas. Cada nova palavra criada na interface é enviada para o servidor, onde a pontuação é contabilizada. As palavras no servidor são verificadas a partir de um dicionario de inglês. Ao fim do tempo a pontuação é apresentada ao usuário e a aplicação é reiniciada.  
+
+
+regras 
+O objetivo do jogo é formar a maior quantidade de palavras possíveis no tempo do jogo, sendo que palavras maiores possuem pontuações maiores.  
+
+como jogar
+
+
+
+·         Protocolo utilizado
+
+
+·         Algoritmos desenvolvidos
+
+
+
+
+\subsection{Subsections}
+
+The subsection titles must be in boldface, 12pt, flush left.
+
+\section{Conclusão}\label{sec:figs}
+
+·         O que foi feito e deu certo
+·         O que foi feito e não deu certo (dificuldade)
+·         O que não foi feito
+·         O que pode ser melhorado
+
+Figure and table captions should be centered if less than one line
+(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
+both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
+be Helvetica, 10 point, boldface, with 6 points of space before and after each
+caption.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{fig1.jpg}
+\caption{A typical figure}
+\label{fig:exampleFig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.3\textwidth]{fig2.jpg}
+\caption{This figure is an example of a figure caption taking more than one
+  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
+\label{fig:exampleFig2}
+\end{figure}
+
+In tables, try to avoid the use of colored or shaded backgrounds, and avoid
+thick, doubled, or unnecessary framing lines. When reporting empirical data,
+do not use more decimal digits than warranted by their precision and
+reproducibility. Table caption must be placed before the table (see Table 1)
+and the font used must also be Helvetica, 10 point, boldface, with 6 points of
+space before and after each caption.
+
+\begin{table}[ht]
+\centering
+\caption{Variables to be considered on the evaluation of interaction
+  techniques}
+\label{tab:exTable1}
+\includegraphics[width=.7\textwidth]{table.jpg}
+\end{table}
+
+\section{Images}
+
+All images and illustrations should be in black-and-white, or gray tones,
+excepting for the papers that will be electronically available (on CD-ROMs,
+internet, etc.). The image resolution on paper should be about 600 dpi for
+black-and-white images, and 150-300 dpi for grayscale images.  Do not include
+images with excessive resolution, as they may take hours to print, without any
+visible difference in the result. 
+
+\section{Referências}
+
+Bibliographic references must be unambiguous and uniform.  We recommend giving
+the author names references in brackets, e.g. \cite{knuth:84},
+\cite{boulic:91}, and \cite{smith:99}.
+
+The references must be listed using 12 point font size, with 6 points of space
+before each reference. The first line of each reference should not be
+indented, while the subsequent should be indented by 0.5 cm.
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}
+

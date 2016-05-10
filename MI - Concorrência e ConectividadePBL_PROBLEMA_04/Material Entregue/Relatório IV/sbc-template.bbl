@@ -1,0 +1,58 @@
+\begin{thebibliography}{}
+
+\bibitem[Gouveia 2008]{gouveia:2008}
+Gouveia, D. (2008).
+\newblock {\em \uppercase{J}ava em \uppercase{R}ede -
+  \uppercase{P}rograma\c{c}\~{a}o \uppercase{D}istribu\'{i}da na
+  \uppercase{I}nternet}.
+\newblock Brasport.
+
+\bibitem[Kozlowski 2007a]{kozlowski1:2007}
+Kozlowski, W. (2007a).
+\newblock \uppercase{A}symetric cryptography - \uppercase{S}tep 1.
+\newblock Dispon\'{i}vel em:
+  $<$http://pt.wikipedia.org/wiki/Ficheiro:Asymetric\_cryptography\_-\_step\_1.svg$>$.
+  Acesso em: 12 dez. 2013.
+
+\bibitem[Kozlowski 2007b]{kozlowski2:2007}
+Kozlowski, W. (2007b).
+\newblock \uppercase{A}symetric cryptography - \uppercase{S}tep 2.
+\newblock Dispon\'{i}vel em:
+  $<$http://pt.wikipedia.org/wiki/Ficheiro:Asymetric\_cryptography\_-\_step\_2.svg$>$.
+  Acesso em: 12 dez. 2013.
+
+\bibitem[Leite and Costa 2013]{leite:2013}
+Leite, D. and Costa, E. (2013).
+\newblock Problema 3 - \uppercase{M}etr\^{o}s compartilhados
+  (\uppercase{R}elat\'{o}rio).
+
+\bibitem[Milanov 2009]{milanov:2009}
+Milanov, E. (2009).
+\newblock \uppercase{T}he \uppercase{RSA} \uppercase{A}lgorithm.
+\newblock Dispon\'{i}vel em:
+  $<$http://www.math.washington.edu/\~morrow/336\_09/papers/Yevgeny.pdf$>$.
+  Acesso em: 12 dez. 2013.
+
+\bibitem[Mousa and Hamad 2006]{mousa:2006}
+Mousa, A. and Hamad, A. (2006).
+\newblock \uppercase{E}valuation of the \uppercase{RC}4 \uppercase{A}lgorithm
+  for \uppercase{D}ata \uppercase{E}ncryption.
+\newblock Dispon\'{i}vel em:
+  $<$http://pt.wikipedia.org/wiki/Ficheiro:Asymetric\_cryptography\_-\_step\_2.svg$>$.
+  Acesso em: 12 dez. 2013.
+
+\bibitem[Oracle 1999]{oracle:1999}
+Oracle (1999).
+\newblock \uppercase{T}rail: \uppercase{RMI}.
+\newblock Dispon\'{i}vel em: $<$http://docs.oracle.com/javase/tutorial/rmi/$>$.
+  Acesso em: 12 dez. 2013.
+
+\bibitem[Zheng 1999]{zheng:1999}
+Zheng, P. (1999).
+\newblock \uppercase{A}n \uppercase{B}rief \uppercase{U}ntroduction to
+  \uppercase{RMI}.
+\newblock Dispon\'{i}vel em:
+  $<$http://www.cs.cmu.edu/afs/cs.cmu.edu/user/pzheng/www/KDI-IIM/RMI\_intro.html$>$.
+  Acesso em: 12 dez. 2013.
+
+\end{thebibliography}

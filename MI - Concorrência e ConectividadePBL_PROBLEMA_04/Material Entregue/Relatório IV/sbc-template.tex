@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+\usepackage[brazil]{babel}   
+\usepackage[latin1]{inputenc}
+     
+\sloppy
+
+\title{Problema 4 - Ferrovia compartilhada}
+
+\author{Diego J. Leite, Ênio M. Costa e João Victor M. do Nascimento}
+
+
+\address{Departamento de Tecnologia -- Universidade Estadual de Feira de Santana
+  (UEFS)\\
+  Caixa Postal 44.036-900 -- Feira de Santana -- BA -- Brazil
+  \email{diegojleite@gmail.com, eniiocosta@gmail.com, victormota15@gmail.com}
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+This article is related to the fourth problem of discipline MI-Competition and Connectivity Course of Computer Engineering, of the Universidade Estadual de Feira de Santana, and it is a the product of a proposed problem in tutorials sessions that aims to understand the functioning and synthesize a system of control for several shared rails between tree trains. The solution for this problem will be presented through of utilization of distribuited systems, where the messages that are exchanged over the network, among stakeholders, have additional layers of security provided by techniques of encryption and the remote method invocation system (RMI).
+\end{abstract}
+     
+\begin{resumo} 
+Este artigo é referente ao quarto problema da disciplina MI-Concorrência e Conectividade do curso de Engenharia de Computação, da Universidade Estadual de Feira de Santana, e trata-se do produto de um pro-blema proposto em sessões tutoriais que tem como finalidade compreender o funcionamento e sintetizar um sistema de controle para vários trilhos compartilhados entre três trens. A solução para este problema será apresentada através da utilização de sistemas distribuídos, onde as mensagens que são trocadas pela rede, entre os envolvidos, contam com camadas adicionais de segurança providas por técnicas de criptografia e com o sistema de invocação remota de métodos (RMI).
+\end{resumo}
+
+
+\section{Introdução} \label{sec:1}
+Projetos bem planejados assumem possibilidades de ajustes futuros e melhorias relacionadas ao produto final. Modificações podem alterar a estrutura final de um projeto concluído e adicionar características ou comportamentos ao mesmo. Em ferrovias, mudanças podem estar relacionadas com a aquisição de novas linhas de trem ou apenas com a inclusão de novos trilhos em percursos existentes.
+
+Depois que a linha de metrô compartilhada foi construída, e colocada em funcionamento \cite{leite:2013}, o serviço a possou a ser muito requisitado pela população da cidade. Para atender a todos os adeptos deste novo meio de locomoção, o prefeito resolveu ampliar a capacidade de atendimento da ferrovia da cidade, através da adição de uma nova linha de metrô, incorporando-a com as já existentes. Esta nova linha utilizará as outras linhas existentes para trafegar os seus veículos, através do comparti-lhamento dos trilhos da ferrovia. Os trens percorrerão o seu percusso no sentido horário, proporcionando o ocorrimento de colisões onde os trilhos que são compartilhados.
+
+As colisões deverão ser controladas através de mecanismos de controle de velocidade durante a utilização dos trilhos compartilhados. Para isto, o sistema contará com regras de prioridade entre os trens, onde o trem prioritário possui a capacidade de alterar a velocidade dos trens que estão circulando na ferrovia da cidade. A comunicação continuará a ser não centralizada, ou seja, não existirá um servidor central que responderá as requisições de cada trem em circulação nas linhas de metrô.
+
+As informações que serão trocadas entre os trens envolverão um alto gral de peri-culosidade, exigindo a necessidade de implantação de técnicas de segurança durante a comunicação entre os metrôs. A mudança de velocidade realizada pelo trem prioritário, nos outros trens, será efetivada com o advento de técnicas de criptografia, onde as mensagens que serão trocadas entre os envolvidos necessitarão de camadas de segurança para proteger essas informações.
+
+O sistema de metrô será controlado distribuidamente entre os trens, ou seja, cada trem disponibilizará suas informações para outro trem existente na linha de metrô, descartando a necessidade de implantação de um servidor ou controlador central. As informações enviadas e coletadas na linha de metrô serão determinantes para que apenas um trem tenha acesso ao trilho compartilhado, bloqueando o acesso ao trilho até que ele seja inteiramente desocupado.
+
+Este relatório fora subdividido em quatro seções, são elas: Fundamentação teórica (\ref{sec:2}): noções teóricas que servem ao trabalho experimental realizado; Metodologia (\ref{sec:3}): o que foi feito para resolver o problema; Resultados e discussões (\ref{sec:4}): soluções encontradas e desenvolvidas para a resolver o problema; Conclusão (\ref{sec:5}): ideias conclusivas e possíveis melhorias que podem ser desenvolvidas para implementações futuras.
+
+\section{Fundamentação teórica} \label{sec:2}
+
+Esta seção está subdividida em quatro subseções, todas elas contendo informações re-levantes
+para o acompanhamento da leitura do relatório: Seção \ref{sec:2.1}, \textit{Rivest-Shamir-Adleman cryptosystem}; Seção \ref{sec:2.2}, RC4; Seção \ref{sec:2.3}, \textit{Remote Method Invocation}.
+
+\section{\textit{Rivest-Shamir-Adleman cryptosystem}} \label{sec:2.1}
+
+O sistema de criptografia \textit{Rivest-Shamir-Adleman} (RSA) é conhecido como o primeiro modelo de encriptação de dados utilizando o conceito de chave pública, sendo largamento utilizado na segurança de informações a serem transmitidas.
+
+Em um sistema de criptografia assimétrica, os interessados em compartilhar informações de forma segura geram, através de cálculos matemáticos \cite{milanov:2009}, uma chave privada e outra pública (Figura 1) para que os dados possam ser encriptados e decriptados respectivamente.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{rsa1.png}
+\caption{Alice gera duas chaves, uma pública e outra privada, mas envia apenas a chave pública para Bob \cite{kozlowski1:2007}.}
+\label{fig:exampleFig1}
+\end{figure}
+
+Caso Alice (Figura 2), detentora dos dados a serem compartilhados, queira enviar informações encriptadas para Bob, é necessário que ela, através do algoritmo RSA, gere uma chave privada e outra pública. A chave privada servirá para que os dados de Alice sejam devidamente criptografados. Os dados chegarão para Bob, mas sem sentido, pois estão criptografados. Então, é necessário Alice envie também a chave pública que foi gerada juntamente com a chave privada que foi utilizada para encriptar os dados. Em posse da chave pública, Bob poderá decriptar a informação recebida e fazer a leitura do conteúdo que foi originalmente gerado por Alice.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{rsa2.png}
+\caption{Alice envia os dados e a chave pública para Bob, para que ele possa ler o conteúdo original da informação enviada \cite{kozlowski2:2007}.}
+\label{fig:exampleFig2}
+\end{figure}
+
+\subsection{RC4} \label{sec:2.2}
+
+O RC4 é um algoritmo de encriptação simétrica, onde cada \textit{bit} do dado é sequencialmente encriptado através de um bit da chave gerada \cite{mousa:2006}. Este algoritmo é utilizado também para decriptar \textit{steams} de dados através de uma função XOR entre a chave simétrica gerada e o dado e ser decriptado.
+
+\subsection{\textit{Remote Method Invocation}} \label{sec:2.3}
+
+O \textit{Remote Method Invocation} (RMI) é uma abstração utilizada em \textit{Java}\footnote[1]{Referência para a linguagem Java (pacote java.lang): http://docs.oracle.com/javase/7/docs/api/java/lang /package-summary.html} para a comunicação em rede. Com o advento do RMI é possível que um objeto, em estado de execução, em uma máquina virtual Java invoque métodos de outra máquina virtual Java \cite{oracle:1999} .
+
+Um sistema RMI é constituído por três elementos: cliente RMI, servidor RMI e um servidor de registro \cite{gouveia:2008} . Onde, o cliente RMI acessa os métodos, disponibilizados em uma interface de acesso no servidor de registro, de outro objeto Java através da rede, representando o servidor RMI (Figura 3).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{rmi.jpg}
+\caption{Cliente acessa os métodos do servidor através do servidor de registro \cite{zheng:1999}.}
+\label{fig:exampleFig3}
+\end{figure}
+
+\section{Metodologia} \label{sec:3}
+
+O projeto foi desenvolvido utilizando o ambiente integrado de desenvolvimento \textit{Eclipse}\footnote[2]{Site do projeto: http://eclipse.org/}. A linguagem de programação escolhida foi \textit{Java SE}\footnote[3]{Ducumentação da linguagem: http://www.oracle.com/technetwork/java/javase/documentation/index .html}. O versionamento do código foi feito através do sistema de controle de versões \textit{Git}\footnote[4]{Site do projeto: http://git-scm.com/}, possibilitando o trabalho em equipe no mesmo código, sem que limitações de disponibilidade dos envolvidos afetassem no processo de desenvolvimento do projeto.
+
+A implementação da proposta de solução foi realizada utilizando conceitos de sistemas distribuídos \textit{peer-to-peer} \cite{leite:2013}, pois neste problema seria necessário que cada instância da aplicação desempenhasse o papel de Cliente e de Servidor. A comunicação entre os trens conta com criptografia entre as mensagens que são trocadas.
+
+Foi necessário representar graficamente a solução através de ferramentas disponibilizadas pelo \textit{Java2D} (Seção 2.4), melhorando a percepção de quem analisasse a proposta de solução desenvolvida para o problema.
+
+\section{Resultados e discussões} \label{sec:4}
+
+Para definir o trem com prioridade no sistema o usuário deverá informar uma senha no momento de inicialização (Figura 4), esta senha é única e está salva de maneira criptografada (Seção 2.2) no código fonte do programa. Caso o usuário não possua senha deve-se entrar em contato com a empresa responsável pelo sistema já que não existe a possibilidade de efetuar o cadastro de uma nova.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{app1.png}
+\caption{Painel de conexão com os outros trens da ferrovia.}
+\label{fig:exampleFig4}
+\end{figure}
+
+Após efetuar o login o usuário recebe a mensagem de que o sistema esta aguardando as conexões (Figura 4). Neste momento o \textit{host}, onde o usuário iniciou o programa, cria dois \textit{sockets} para aceitar a conexão dos outros trens. Assim que um trem se conecta, é feita uma verificação para identificar se existem outros trens conectados ao trem prioritário, caso exista o endereço desses trens é enviado pelo trem prioritário para que o novo trem possa também se comunicar com os demais, caso não exista nenhuma outra conexão o novo trem se conecta ao primeiro e abre um \textit{socket} para aceitar a conexão do próximo Cliente, que neste caso é o terceiro trem. Depois que a comunicação entre os três trens é estabelecida, a chave simétrica (Seção 2.2) é gerada (Figura 5) e enviada para todos.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{app2.jpg}
+\caption{A chave simétrica é gerada e enviada para o trens.}
+\label{fig:exampleFig5}
+\end{figure}
+
+Durante a inicialização do sistema a interface mostra ao usuário através de mensagens a situação atual da conexão. Após estabelecida a conexão dos três trens uma nova janela é aberta (Figura 6), nesta janela é desenhado o trajeto dos trens e sua posição atual, sendo essa posição atualizada a todo instante.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{app3.jpg}
+\caption{Janela que apresenta a posição inicial de todos os trens existentes na ferrovia.}
+\label{fig:exampleFig6}
+\end{figure}
+
+\section{Conclusão} \label{sec:5}
+
+Utilizando \textit{peer-to-peer} \cite{leite:2013}, foi possível conectar diversos \textit{hosts} sem que um conhecesse o endereço de todos os outros. A arquitetura desenvolvida se mostrou eficiente neste quesito, já que o terceiro trem estabelece uma conexão com o segundo mesmo sem saber o seu endereço.
+
+Todas as funcionalidades foram implementadas exceto a possibilidade de alteração da velocidade de um determinado trem pelo metrô prioritário através do RMI (Seção 2.3). A comunicação entre os trens ocorre de maneira segura através da criptografia das mensagens utilizando chaves assimétricas (Seção 2.1) e simétricas (Seção 2.2).
+
+Algumas melhorias poderiam ser implementadas no sistema, visando uma melhor comunicação entre os trens. Poderia ser implementado um chat, para que cada maquinista de trem pudesse enviar mensagens informativas para outros trens em circulação na ferrovia. A mudança de curso, por parte do trem, seria uma possibilidade interessante de ser implementada em versões futuras deste produto, pois esta é uma situação presente no mundo real.
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}

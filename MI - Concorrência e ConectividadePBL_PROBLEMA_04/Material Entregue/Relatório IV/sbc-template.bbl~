@@ -1,0 +1,20 @@
+\begin{thebibliography}{}
+
+\bibitem[Knuth 1984]{knuth:84}
+Knuth, D.~E. (1984).
+\newblock {\em The {\TeX} Book}.
+\newblock Addison-Wesley, 15th edition.
+
+\bibitem[Knuth 2011]{barcia:2011}
+R. Barcia (2011).
+\newblock {Realidade Virtual através de jogos na educação}.
+\newblock Disponível em: http://www.portcom.intercom.org.br/pdfs/470df3283c76a597e6ecccda8c4b1bb3.PDF. Acesso em: setembro de 2013
+
+\end{thebibliography}
+
+@InCollection{barcia:2011,
+  author =         {R. Barcia},
+  title    =       {Realidade Virtual através de jogos na educação},
+  year   =         {2011},
+  note   =         {Disponível em: http://www.portcom.intercom.org.br/pdfs/470df3283c76a597e6ecccda8c4b1bb3.PDF. Acesso em: setembro de 2013}
+}
