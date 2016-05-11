@@ -134,7 +134,7 @@ public class MainWindow {
 
 							if (train[thisTrain].isEntering()) { 
 								if (zoneLocked) {// Se quer entrar mas está bloqueado, diminue drasticamente.
-									multicast("SET_VEL:" + thisTrain + ":" + 0.5);
+									multicast("SET_VEL:" + thisTrain + ":" + 0.2);
 								} else {//SE QUER ENTRAR E A ZONA NAO ESTA BLOQUEADA
 									multicast("QUERY_STATUS:" + thisTrain);  // Se quer entrar, pergunta o status.
 								}
@@ -199,37 +199,21 @@ public class MainWindow {
 
 					if (Integer.parseInt(tokens[2]) == 0) { //zona esta liberada para mim
 						multicast("SET_VEL:" + thisTrain + ":" + 10);
-						train[thisTrain].setVelocity(10);
 						multicast("LOCK_RESOURCE:");											
 					}
 					else{ //zona esta bloqueada para mim
-						multicast("SET_VEL:" + thisTrain + ":" + 0.5);
+						multicast("SET_VEL:" + thisTrain + ":" + 0.2);
 					}
 				}
 			} else if (inputMessage.startsWith("LOCK_RESOURCE:")) { // Bloqueia a zona para você
 				zoneLocked = true;
-				multicast("ALGUEM ENTROU NA ZONA ENTÃO ELA ESTA SENDO BLOQUEADA PARA MIM");
+				multicast("ALGUEM ENTROU NA ZONA ENTÃO ELA ESTA SENDO BLOQUEADA PARA MIM, TREM = " + thisTrain);
 				
 				
 				
 			} else if (inputMessage.startsWith("UNLOCK_RESOURCE:")) { // Desbloqueia a zona para você
 				zoneLocked = false;
-				multicast("LIBERANDO A ZONA PARA OS TRENS");
-				if (thisTrain == 0){
-					multicast("SET_VEL:0:0.5");
-					multicast("SET_VEL:1:1");
-					multicast("SET_VEL:2:1");
-				}
-				else if (thisTrain == 1){
-					multicast("SET_VEL:0:1");
-					multicast("SET_VEL:1:0.5");
-					multicast("SET_VEL:2:1");
-				}
-				else if (thisTrain == 2){
-					multicast("SET_VEL:0:1");
-					multicast("SET_VEL:1:1");
-					multicast("SET_VEL:2:0.5");
-				}
+				multicast("LIBERANDO A ZONA PARA OS TRENS");				
 			}
 
 		} catch (NotActiveException e) {
