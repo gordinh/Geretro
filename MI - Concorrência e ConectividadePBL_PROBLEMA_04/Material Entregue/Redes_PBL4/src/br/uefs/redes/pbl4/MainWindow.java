@@ -129,7 +129,8 @@ public class MainWindow {
 
 						try {
 
-							multicast("WALK:" + thisTrain); // Envia o comando de andar aos outros trens
+							multicast("WALK:" + thisTrain + ':' + train[thisTrain].getX() + ':' + train[thisTrain].getY()); 
+							// Envia o comando de andar aos outros trens
 
 							if (train[thisTrain].isEntering()) { 
 								if (zoneLocked) {// Se quer entrar mas está bloqueado, diminue drasticamente.
@@ -177,13 +178,14 @@ public class MainWindow {
 		try {
 			if (inputMessage.startsWith("WALK:")) { // O comando de andar, recebido pelo peer.
 				String[] tokens = inputMessage.split(":");
-				train[Integer.parseInt(tokens[1])].walk();
+				//train[Integer.parseInt(tokens[1])].walk();
+				train[Integer.parseInt(tokens[1])].atualizarPosicao(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
 			}
 			else if (inputMessage.startsWith("SET_VEL:")) {
 				String[] tokens = inputMessage.split(":");
 				train[Integer.parseInt(tokens[1])].setVelocity(Double
 						.parseDouble(tokens[2]));
-				multicast("WALK:" + thisTrain);
+				multicast("WALK:" + thisTrain + ':' + train[thisTrain].getX() + ':' + train[thisTrain].getY());
 
 			} else if (inputMessage.startsWith("QUERY_STATUS:")) { // Alguém quer entrar na zona crítica
 				String[] tokens = inputMessage.split(":");

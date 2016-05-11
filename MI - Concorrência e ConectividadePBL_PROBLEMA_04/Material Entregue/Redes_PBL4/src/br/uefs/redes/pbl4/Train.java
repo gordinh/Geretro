@@ -176,5 +176,10 @@ public class Train extends JLabel {
 
 		return false;
 	}
+	
+	
+	public void atualizarPosicao(int X, int Y){
+		setLocation(X,  Y);
+	}
 
 }

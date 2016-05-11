@@ -110,7 +110,7 @@ public class LoginFrame extends JFrame {
 		textField = new JTextField();
 		panel_1.add(textField, BorderLayout.NORTH);
 		textField.setColumns(20);
-		textField.setText("192.168.1.126");
+		textField.setText("192.168.0.106");
 
 		lblStatus = new JLabel("Status: Idle...");
 		panel_1.add(lblStatus, BorderLayout.SOUTH);
