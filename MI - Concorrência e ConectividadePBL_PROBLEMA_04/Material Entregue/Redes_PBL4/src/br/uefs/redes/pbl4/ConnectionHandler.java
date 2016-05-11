@@ -15,7 +15,7 @@ import java.net.Socket;
  * Cada par tem 1 conexão para outro par.
  * 
  * 
- * @author Gordinh
+ * @author Gordinh e Sillas
  * 
  */
 public class ConnectionHandler {

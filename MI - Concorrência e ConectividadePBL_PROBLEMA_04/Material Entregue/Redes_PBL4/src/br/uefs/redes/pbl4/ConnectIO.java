@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * @author Victor, Diego, Ênio
+ * @author Gordinh e Sillas
  * 
  *         Responsável pelo canal de comunicação dos sockets
  * 
@@ -76,10 +76,11 @@ public class ConnectIO {
 	 * @throws NotActiveException
 	 */
 	public void postSecure(String message) throws NotActiveException {
-		//System.out.println("POST -> " + message);
+		System.out.println("POST -> " + message);
 		if (cypher == null)
 			throw new NotActiveException();
 		out.println(Base64.encodeBytes(cypher.encrypt(message.getBytes())));
+		System.out.println("SAIDA POST OUT:" + out);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class ConnectIO {
 		if (cypher == null)
 			throw new NotActiveException();
 		String out = new String(cypher.decrypt(Base64.decode(in.readLine())));
-		//System.out.println("GET -> " + out);
+		System.out.println("GET -> " + out);
 		return out;
 	}
 }

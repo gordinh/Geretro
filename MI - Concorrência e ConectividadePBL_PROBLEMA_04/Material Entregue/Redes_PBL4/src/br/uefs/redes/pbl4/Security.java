@@ -13,7 +13,7 @@ import java.util.UUID;
  * troca de chaves e validação da senha
  * 
  * 
- * @author Gordinh
+ * @author Gordinh e Sillas
  * 
  */
 public class Security {

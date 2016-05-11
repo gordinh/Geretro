@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 /**
  * Classe que reúne o estado dos trens do sistema
  * 
- * @author gordinh
+ * @author Gordinh e Sillas
  * 
  */
 public class Train extends JLabel {
@@ -49,7 +49,6 @@ public class Train extends JLabel {
 		this.y = startLocation.y;
 		this.criticalEnter = criticalEnter;
 		this.criticalLeave = criticalLeave;
-
 		setLocation(startLocation);
 		setSize(getPreferredSize());
 	}
@@ -63,7 +62,7 @@ public class Train extends JLabel {
 	}
 
 	public void accel() {
-		this.velocity += 2.0;
+		this.velocity += 1.0;
 	}
 
 	/**
@@ -155,19 +154,24 @@ public class Train extends JLabel {
 	 * @return
 	 */
 	public boolean isEntering() {
-		if (criticalEnter.distance(getLocation()) < 30)
+		if (criticalEnter.distance(getLocation()) < 50)
 			return true;
-
+		else if (criticalEnter.distance(getLocation()) < 40)
+			return true;
+		else if (criticalEnter.distance(getLocation()) < 20)
+			return true;
 		return false;
 	}
 
+
+	
 	/**
 	 * Verifica se o trem está saindo da zona crítica
 	 * 
 	 * @return
 	 */
 	public boolean isLeaving() {
-		if (criticalLeave.distance(getLocation()) < 30)
+		if (criticalLeave.distance(getLocation()) < 10)
 			return true;
 
 		return false;

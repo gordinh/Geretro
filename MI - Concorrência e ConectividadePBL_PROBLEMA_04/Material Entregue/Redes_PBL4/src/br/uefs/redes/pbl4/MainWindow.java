@@ -20,7 +20,7 @@ import javax.swing.Timer;
  * usuário.
  * 
  * 
- * @author Gordinh
+ * @author Gordinh e Sillas 
  * 
  */
 public class MainWindow {
@@ -64,17 +64,17 @@ public class MainWindow {
 		JLabel lbl = new JLabel(new ImageIcon(getClass().getResource("/images/bg.png")));
 		lbl.setSize(lbl.getPreferredSize());
 
-		ImageIcon image = new ImageIcon(getClass().getResource("/images/train3.png"));
+		ImageIcon image = new ImageIcon(getClass().getResource("/images/train.png"));
 		train[0] = new Train(new Rectangle(200, 100, 500, 250), new Point(200,
 				100), new Point(500, 150), new Point(200, 150), image);
 		train[0].setVelocity(1.6);
 
-		image = new ImageIcon(getClass().getResource("/images/train.png"));
+		image = new ImageIcon(getClass().getResource("/images/train2.png"));
 		train[1] = new Train(new Rectangle(50, 250, 350, 550), new Point(50,
 				250), new Point(150, 250), new Point(300, 550), image);
 		train[1].setVelocity(2);
 
-		image = new ImageIcon(getClass().getResource("/images/train2.png"));
+		image = new ImageIcon(getClass().getResource("/images/train3.png"));
 		train[2] = new Train(new Rectangle(350, 250, 650, 550), new Point(600,
 				250), new Point(500, 550), new Point(550, 250), image);
 		train[2].setVelocity(3);
@@ -113,7 +113,6 @@ public class MainWindow {
 		}).start();
 
 		timer1 = new Timer(1000 / 24, new ActionListener() { // Esta thread
-					private boolean query;
 
 					// envia o
 					// comando para
@@ -132,24 +131,21 @@ public class MainWindow {
 
 							multicast("WALK:" + thisTrain); // Envia o comando de andar aos outros trens
 
-							if (train[thisTrain].isEntering()) { // Se quer entrar mas está bloqueado, para.
-								if (zoneLocked) {
-									train[thisTrain].setVelocity(2.5);
-
-									multicast("SET_VEL:" + thisTrain + ":" + 2.5);
-									
-								} else {
-									train[thisTrain].setVelocity(5.0);
-
-									multicast("SET_VEL:" + thisTrain + ":" + 5.0);
+							if (train[thisTrain].isEntering()) { 
+								if (zoneLocked) {// Se quer entrar mas está bloqueado, diminue drasticamente.
+									multicast("SET_VEL:" + thisTrain + ":" + 0.5);
+								} else {//SE QUER ENTRAR E A ZONA NAO ESTA BLOQUEADA
+									multicast("QUERY_STATUS:" + thisTrain);  // Se quer entrar, pergunta o status.
 								}
 							}
 
 							if (train[thisTrain].isEntering()) {
-								multicast("QUERY_STATUS:" + thisTrain);  // Se quer entrar, pergunta o status.
+								
 							} else if (train[thisTrain].isLeaving()) {
 								multicast("UNLOCK_RESOURCE:"); // Se está saindo, libera o trilho.
-							}
+								
+							} 
+							
 
 						} catch (NotActiveException e1) {
 							e1.printStackTrace();
@@ -182,39 +178,56 @@ public class MainWindow {
 			if (inputMessage.startsWith("WALK:")) { // O comando de andar, recebido pelo peer.
 				String[] tokens = inputMessage.split(":");
 				train[Integer.parseInt(tokens[1])].walk();
-			} else if (inputMessage.startsWith("SET_VEL:")) {
+			}
+			else if (inputMessage.startsWith("SET_VEL:")) {
 				String[] tokens = inputMessage.split(":");
 				train[Integer.parseInt(tokens[1])].setVelocity(Double
 						.parseDouble(tokens[2]));
+				multicast("WALK:" + thisTrain);
 
 			} else if (inputMessage.startsWith("QUERY_STATUS:")) { // Alguém quer entrar na zona crítica
 				String[] tokens = inputMessage.split(":");
+				System.out.println("THIS_TRAIN:" + thisTrain);
 				if((Integer.parseInt(tokens[1]) + 1   ) % 3 == thisTrain) // Responde ao trem que chegou depois de você
 					multicast("STATUS:" + tokens[1] + ":" + (zoneLocked ? 1 : 0)); // Com o status
 				
 			} else if (inputMessage.startsWith("STATUS:")) {
 				String[] tokens = inputMessage.split(":");
 				if (Integer.parseInt(tokens[1]) == thisTrain) {
-					if (Integer.parseInt(inputMessage.split(":")[2]) == 0) {
 
-						double rvel = Math.random() * 2 + 1; // Velocidade de saída aleatória
-
-						
-						if( (control++ % 3) == thisTrain){ // Só sai se você for o próximo da fila
-							multicast("SET_VEL:" + thisTrain + ":" + rvel);
-							train[thisTrain].setVelocity(rvel);
-							multicast("LOCK_RESOURCE:");
-						}
-						
+					if (Integer.parseInt(tokens[2]) == 0) { //zona esta liberada para mim
+						multicast("SET_VEL:" + thisTrain + ":" + 10);
+						train[thisTrain].setVelocity(10);
+						multicast("LOCK_RESOURCE:");											
+					}
+					else{ //zona esta bloqueada para mim
+						multicast("SET_VEL:" + thisTrain + ":" + 0.5);
 					}
 				}
 			} else if (inputMessage.startsWith("LOCK_RESOURCE:")) { // Bloqueia a zona para você
 				zoneLocked = true;
+				multicast("ALGUEM ENTROU NA ZONA ENTÃO ELA ESTA SENDO BLOQUEADA PARA MIM");
 				
 				
 				
 			} else if (inputMessage.startsWith("UNLOCK_RESOURCE:")) { // Desbloqueia a zona para você
 				zoneLocked = false;
+				multicast("LIBERANDO A ZONA PARA OS TRENS");
+				if (thisTrain == 0){
+					multicast("SET_VEL:0:0.5");
+					multicast("SET_VEL:1:1");
+					multicast("SET_VEL:2:1");
+				}
+				else if (thisTrain == 1){
+					multicast("SET_VEL:0:1");
+					multicast("SET_VEL:1:0.5");
+					multicast("SET_VEL:2:1");
+				}
+				else if (thisTrain == 2){
+					multicast("SET_VEL:0:1");
+					multicast("SET_VEL:1:1");
+					multicast("SET_VEL:2:0.5");
+				}
 			}
 
 		} catch (NotActiveException e) {
@@ -232,7 +245,6 @@ public class MainWindow {
 	private void multicast(String message) throws NotActiveException {
 		firstConn.postSecure(message);
 		secondConn.postSecure(message);
-		System.out.println(message);
 	}
 
 	/**
