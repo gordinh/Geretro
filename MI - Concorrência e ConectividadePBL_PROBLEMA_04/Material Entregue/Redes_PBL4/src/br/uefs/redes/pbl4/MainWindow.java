@@ -112,16 +112,11 @@ public class MainWindow {
 			}
 		}).start();
 
-		timer1 = new Timer(1000 / 24, new ActionListener() { // Esta thread
-
-					// envia o
-					// comando para
-					// os outros 2;
+		timer1 = new Timer(1000 / 24, new ActionListener() { // Esta thread envia o comando para os outros 2;
 					@Override
 					public void actionPerformed(ActionEvent e) {
 
-						train[thisTrain].walk(); // Atualiza a posição deste
-													// trem;
+						train[thisTrain].walk(); // Atualiza a posição deste trem;
 						window.repaint();
 
 						window.setTitle("PosX: " + train[thisTrain].getX()
@@ -137,26 +132,19 @@ public class MainWindow {
 									multicast("SET_VEL:" + thisTrain + ":" + 0.2);
 								} else {//SE QUER ENTRAR E A ZONA NAO ESTA BLOQUEADA
 									multicast("QUERY_STATUS:" + thisTrain);  // Se quer entrar, pergunta o status.
+									zoneLocked = true;
 								}
 							}
-
-							if (train[thisTrain].isEntering()) {
-								
-							} else if (train[thisTrain].isLeaving()) {
-								multicast("UNLOCK_RESOURCE:"); // Se está saindo, libera o trilho.
-								
+							else if (train[thisTrain].isLeaving()) {
+								multicast("UNLOCK_RESOURCE:"); // Se está saindo, libera o trilho.		
 							} 
-							
-
 						} catch (NotActiveException e1) {
 							e1.printStackTrace();
 						}
-
 					}
 				});
 
-		if (thisTrain != 0) { // Se este não for o prioritário, esconde os
-								// sliders.
+		if (thisTrain != 0) { // Se este não for o prioritário, esconde os sliders.
 			firstVel.setVisible(false);
 			secondVel.setVisible(false);
 			info.setVisible(false);
@@ -174,7 +162,6 @@ public class MainWindow {
 	 * @param inputMessage
 	 */
 	private void parse(String inputMessage) {
-
 		try {
 			if (inputMessage.startsWith("WALK:")) { // O comando de andar, recebido pelo peer.
 				String[] tokens = inputMessage.split(":");
@@ -183,35 +170,34 @@ public class MainWindow {
 			}
 			else if (inputMessage.startsWith("SET_VEL:")) {
 				String[] tokens = inputMessage.split(":");
-				train[Integer.parseInt(tokens[1])].setVelocity(Double
-						.parseDouble(tokens[2]));
+				train[Integer.parseInt(tokens[1])].setVelocity(Double.parseDouble(tokens[2]));
 				multicast("WALK:" + thisTrain + ':' + train[thisTrain].getX() + ':' + train[thisTrain].getY());
 
-			} else if (inputMessage.startsWith("QUERY_STATUS:")) { // Alguém quer entrar na zona crítica
+			}
+			else if (inputMessage.startsWith("QUERY_STATUS:")) { // Alguém quer entrar na zona crítica
 				String[] tokens = inputMessage.split(":");
 				System.out.println("THIS_TRAIN:" + thisTrain);
 				if((Integer.parseInt(tokens[1]) + 1   ) % 3 == thisTrain) // Responde ao trem que chegou depois de você
 					multicast("STATUS:" + tokens[1] + ":" + (zoneLocked ? 1 : 0)); // Com o status
 				
-			} else if (inputMessage.startsWith("STATUS:")) {
+			}
+			else if (inputMessage.startsWith("STATUS:")) {
 				String[] tokens = inputMessage.split(":");
 				if (Integer.parseInt(tokens[1]) == thisTrain) {
-
 					if (Integer.parseInt(tokens[2]) == 0) { //zona esta liberada para mim
-						multicast("SET_VEL:" + thisTrain + ":" + 10);
-						multicast("LOCK_RESOURCE:");											
+						multicast("LOCK_RESOURCE:");
+						multicast("SET_VEL:" + thisTrain + ":" + 10);											
 					}
 					else{ //zona esta bloqueada para mim
 						multicast("SET_VEL:" + thisTrain + ":" + 0.2);
 					}
 				}
-			} else if (inputMessage.startsWith("LOCK_RESOURCE:")) { // Bloqueia a zona para você
+			}
+			else if (inputMessage.startsWith("LOCK_RESOURCE:")) { // Bloqueia a zona para você
 				zoneLocked = true;
-				multicast("ALGUEM ENTROU NA ZONA ENTÃO ELA ESTA SENDO BLOQUEADA PARA MIM, TREM = " + thisTrain);
-				
-				
-				
-			} else if (inputMessage.startsWith("UNLOCK_RESOURCE:")) { // Desbloqueia a zona para você
+				multicast("ALGUEM ENTROU NA ZONA ENTÃO ELA ESTA SENDO BLOQUEADA PARA MIM, TREM = " + thisTrain);	
+			}
+			else if (inputMessage.startsWith("UNLOCK_RESOURCE:")) { // Desbloqueia a zona para você
 				zoneLocked = false;
 				multicast("LIBERANDO A ZONA PARA OS TRENS");				
 			}

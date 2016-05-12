@@ -231,32 +231,15 @@ public class LoginFrame extends JFrame {
 						} else { // Se o usuário digitou um IP
 
 							try {
-								ConnectionHandler.connectFirst(InetAddress // Connecta
-																			// ao
-																			// par
-										.getByName(textField.getText()));
-								ConnectIO io = new ConnectIO(ConnectionHandler
-										.getFirst());
-								Security.sendPublicKey(ConnectionHandler // Envia
-																			// a
-																			// chave
-																			// pública
-										.getFirst());
+								ConnectionHandler.connectFirst(InetAddress.getByName(textField.getText()));// Conecta ao par
+								ConnectIO io = new ConnectIO(ConnectionHandler.getFirst());
+								Security.sendPublicKey(ConnectionHandler.getFirst()); // Envia a chave pública
 								setStatus("Conectado, aguardando terceiro par...");
 								String message = io.get();
-								String decrypt = RSA.decrypt(
-										Base64.decode(message),
-										RSA.getPrivateKey()); // Decripta a
-																// mensagem com
-																// a chave
-																// privada
-								Security.symKey = decrypt; // A mensagem que
-															// chegou é a chave
-															// simétrica
-															// aleatória
+								String decrypt = RSA.decrypt(Base64.decode(message),RSA.getPrivateKey()); // Decripta a mensagem com a chave privada
+								Security.symKey = decrypt; // A mensagem que chegou é a chave simétrica aleatória
 
-								io = new ConnectIO(
-										// Abre o canal de comunicação seguro
+								io = new ConnectIO(	// Abre o canal de comunicação seguro
 										ConnectionHandler.getFirst(),
 										Security.symKey);
 
@@ -272,7 +255,8 @@ public class LoginFrame extends JFrame {
 									new MainWindow(1).initUI(); // Inicializa o
 																// sistema
 
-								} else if (message.startsWith("YOU_LAST:")) { // Este
+								}
+								else if (message.startsWith("YOU_LAST:")) { // Este
 																				// par
 																				// é
 																				// o
@@ -291,13 +275,11 @@ public class LoginFrame extends JFrame {
 							} catch (IOException ioe){
 								
 							} catch(ClassNotFoundException e1) {
-
 								e1.printStackTrace();
 							}
 						}
 
-						((JButton) e.getSource()).setEnabled(true); // Reativa o
-																	// botão
+						((JButton) e.getSource()).setEnabled(true); // Reativa o botão
 					}
 
 				}).start();
